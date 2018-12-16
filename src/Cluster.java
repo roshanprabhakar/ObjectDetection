@@ -1,19 +1,16 @@
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Cluster {
 
     private ArrayList<Point> points;
-    Point center;
-    int color;
+    private Point center;
+    private Color color;
 
     public Cluster(int r, int c) {
-        this.center.setRow(r);
-        this.center.setColumn(c);
-        this.color = (int) Math.random()*10000;
+        this.center = new Point(r, c);
+        this.color = new Color((short)(Math.random()*255), (short)(Math.random()*255), (short)(Math.random()*255));
         this.points = new ArrayList<>();
-    }
-
-    public Cluster() {
     }
 
     public void recalculateCenter() {
@@ -31,6 +28,10 @@ public class Cluster {
 
     public Point getCenter() {
         return this.center;
+    }
+
+    public Color getColor() {
+        return this.color;
     }
 
     public ArrayList<Point> getPoints() {

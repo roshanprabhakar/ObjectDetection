@@ -13,6 +13,7 @@ public class Main {
 
     public static void main(String[] args) {
 
+
         BufferedImage image = null;
 
         try {
@@ -29,45 +30,62 @@ public class Main {
         objectFilter.filter(bluepixels2D);
 
         bluepixels2D = objectFilter.getImage();
+
         // k-means here on blue image here
 
-        clusters.add(new Cluster());
-        clusters.add(new Cluster((int) Math.random() * 1080, (int) Math.random() * 1440));
-        clusters.add(new Cluster((int) Math.random() * 1080, (int) Math.random() * 1440));
+        clusters.add(new Cluster((int) Math.random() * 1000, (int) Math.random() * 1000));
+        clusters.add(new Cluster((int) Math.random() * 1000, (int) Math.random() * 1000));
 
-        assignPointsToClusters();
+        ArrayList<Point> validPoints = getValidPoints(bluepixels2D);
+        assignPointsToClusters(validPoints);
 
+        for (Cluster cluster : clusters) {
+            for (Point p : cluster.getPoints()) {
+                image.setRGB(p.getColumn(), p.getRow(), cluster.getColor().getRGB());
+                bluepixels2D[p.getRow()][p.getColumn()] = -1;
+            }
+        }
 
-        // end k-means
         for (int r = 0; r < bluepixels2D.length; r++) {
             for (int c = 0; c < bluepixels2D[r].length; c++) {
-                image.setRGB(c, r, bluepixels2D[r][c]);
+                if (bluepixels2D[r][c] != -1) {
+                    image.setRGB(c, r, bluepixels2D[r][c]);
+                }
             }
         }
 
         display(image);
     }
 
-    public static void assignPointsToClusters() {
-        for (int row = 0; row < 1440; row++) {
-            for (int col = 0; col < 1080; col++) {
-                Cluster closestCluster = findClosestClusterTo(new Point(row, col));
-                closestCluster.add(new Point(row, col));
+    public static ArrayList<Point> getValidPoints(short[][] bluepixels2D) {
+        ArrayList<Point> out = new ArrayList<>();
+        for (int r = 0; r < bluepixels2D.length; r++) {
+            for (int c = 0; c < bluepixels2D[r].length; c++) {
+                if (bluepixels2D[r][c] != 0) {
+                    out.add(new Point(r, c));
+                }
             }
         }
-
+        return out;
     }
 
-    public static Cluster findClosestClusterTo(Point p) {
+    public static void assignPointsToClusters(ArrayList<Point> validPoints) {
+        for (Point p : validPoints) {
+            int closestCluster = findClosestClusterTo(p);
+            clusters.get(closestCluster).add(p);
+        }
+    }
+
+    public static int findClosestClusterTo(Point p) { //finds closest cluster and returns index in arraylist
         double minDistance = Double.MAX_VALUE;
-        Cluster closestCluster = new Cluster();
-        for (Cluster cluster : clusters) {
-            if (p.getDistanceTo(cluster.getCenter()) < minDistance) {
-                closestCluster = cluster;
-                minDistance = p.getDistanceTo(cluster.getCenter());
+        int minIndex = 0;
+        for (int i = 0; i < clusters.size(); i++) {
+            if (p.getDistanceTo(clusters.get(i).getCenter()) < minDistance) {
+                minIndex = i;
+                minDistance = p.getDistanceTo(clusters.get(i).getCenter());
             }
         }
-        return closestCluster;
+        return minIndex;
     }
 
     public static void display(BufferedImage image) {
