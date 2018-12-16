@@ -33,11 +33,13 @@ public class Main {
 
         // k-means here on blue image here
 
-        clusters.add(new Cluster((int) Math.random() * 1000, (int) Math.random() * 1000));
-        clusters.add(new Cluster((int) Math.random() * 1000, (int) Math.random() * 1000));
+        clusters.add(new Cluster(0,0, (short)255,(short)0,(short)0));
+        clusters.add(new Cluster(1439,1019, (short)0,(short)255,(short)0));
+
 
         ArrayList<Point> validPoints = getValidPoints(bluepixels2D);
         assignPointsToClusters(validPoints);
+
 
         for (Cluster cluster : clusters) {
             for (Point p : cluster.getPoints()) {
@@ -77,12 +79,10 @@ public class Main {
     }
 
     public static int findClosestClusterTo(Point p) { //finds closest cluster and returns index in arraylist
-        double minDistance = Double.MAX_VALUE;
         int minIndex = 0;
         for (int i = 0; i < clusters.size(); i++) {
-            if (p.getDistanceTo(clusters.get(i).getCenter()) < minDistance) {
+            if (p.getDistanceTo(clusters.get(i).getCenter()) < p.getDistanceTo(clusters.get(minIndex).getCenter())) {
                 minIndex = i;
-                minDistance = p.getDistanceTo(clusters.get(i).getCenter());
             }
         }
         return minIndex;

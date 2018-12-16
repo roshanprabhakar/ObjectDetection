@@ -26,6 +26,6 @@ public class Point {
 
     public double getDistanceTo(Point other) {
         return Math.sqrt((((this.row)-(other.getRow()))*((this.row)-(other.getRow()))) +
-                (((this.column)+(other.getColumn()))*((this.column)+(other.getColumn()))));
+                (((this.column)-(other.getColumn()))*((this.column)-(other.getColumn()))));
     }
 }

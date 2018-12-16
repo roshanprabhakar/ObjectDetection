@@ -7,9 +7,16 @@ public class Cluster {
     private Point center;
     private Color color;
 
+
+    public Cluster(int r, int c, short red, short blue, short green) {
+        this.color = new Color(red, blue, green);
+        this.center = new Point(r, c);
+        this.points = new ArrayList<>();
+    }
+
     public Cluster(int r, int c) {
         this.center = new Point(r, c);
-        this.color = new Color((short)(Math.random()*255), (short)(Math.random()*255), (short)(Math.random()*255));
+        this.color = new Color((short) (Math.random() * 255), (short) (Math.random() * 255), (short) (Math.random() * 255));
         this.points = new ArrayList<>();
     }
 
