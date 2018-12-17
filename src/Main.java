@@ -22,41 +22,60 @@ public class Main {
             System.err.println("Caught IOException!");
         }
 
-        System.out.println(image.getWidth());
-        System.out.println(image.getHeight());
         bluepixels2D = FilterLib.getShortPixelValuesBW(image);
 
-        ObjectDetectionFilter objectFilter = new ObjectDetectionFilter(130);
+        ObjectDetectionFilter objectFilter = new ObjectDetectionFilter(100);
         objectFilter.filter(bluepixels2D);
 
         bluepixels2D = objectFilter.getImage();
 
         // k-means here on blue image here
 
-        clusters.add(new Cluster(0,0, (short)255,(short)0,(short)0));
-        clusters.add(new Cluster(1439,1019, (short)0,(short)255,(short)0));
+        clusters.add(new Cluster(0,0));
+        clusters.add(new Cluster(1439, 1019));
 
-
+        //loop needs to start here
         ArrayList<Point> validPoints = getValidPoints(bluepixels2D);
-        assignPointsToClusters(validPoints);
+        System.out.println("There are " + validPoints.size() + " valid points");
 
+        for (int rep = 0; rep < 100; rep++) {
 
-        for (Cluster cluster : clusters) {
-            for (Point p : cluster.getPoints()) {
-                image.setRGB(p.getColumn(), p.getRow(), cluster.getColor().getRGB());
-                bluepixels2D[p.getRow()][p.getColumn()] = -1;
-            }
-        }
+            assignPointsToClusters(validPoints);
 
-        for (int r = 0; r < bluepixels2D.length; r++) {
-            for (int c = 0; c < bluepixels2D[r].length; c++) {
-                if (bluepixels2D[r][c] != -1) {
-                    image.setRGB(c, r, bluepixels2D[r][c]);
+            for (Cluster cluster : clusters) {
+                for (Point p : cluster.getPoints()) {
+                    image.setRGB(p.getColumn(), p.getRow(), cluster.getColor().getRGB());
+                    bluepixels2D[p.getRow()][p.getColumn()] = -1;
                 }
+            }
+
+            for (int r = 0; r < bluepixels2D.length; r++) {
+                for (int c = 0; c < bluepixels2D[r].length; c++) {
+                    if (bluepixels2D[r][c] != -1) {
+                        image.setRGB(c, r, bluepixels2D[r][c]);
+                    }
+                }
+            }
+
+            for (Cluster cluster : clusters) {
+                System.out.println(cluster.size());
+            }
+
+            for (Cluster cluster : clusters) {
+                cluster.recalculateCenter();
+                cluster.clear();
             }
         }
 
         display(image);
+    }
+
+    public static void makeMarkerAt(int r, int c, BufferedImage im) {
+        for (int i = r; i < 100; i++) {
+            for (int j = c; j < 100; j++) {
+                im.setRGB(i, j, 14423100);
+            }
+        }
     }
 
     public static ArrayList<Point> getValidPoints(short[][] bluepixels2D) {
@@ -91,7 +110,7 @@ public class Main {
     public static void display(BufferedImage image) {
         JFrame frame = new JFrame();
         frame.getContentPane().setLayout(new FlowLayout());
-        frame.getContentPane().add(new JLabel(new ImageIcon(resize(image, 480, 640))));
+        frame.getContentPane().add(new JLabel(new ImageIcon(image)));
         frame.pack();
         frame.setVisible(true);
 

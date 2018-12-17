@@ -52,4 +52,8 @@ public class Cluster {
     public void add(Point p) {
         this.points.add(p);
     }
+
+    public int size() {
+        return this.points.size();
+    }
 }
