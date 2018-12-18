@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Main {
 
@@ -31,17 +30,26 @@ public class Main {
 
         // k-means here on blue image here
 
-        clusters.add(new Cluster(0,0));
-        clusters.add(new Cluster(1439, 1019));
+        clusters.add(new Cluster((int) (Math.random() * image.getWidth()), (int) (Math.random() * image.getHeight())));
+        clusters.add(new Cluster((int) (Math.random() * image.getWidth()), (int) (Math.random() * image.getHeight())));
+        clusters.add(new Cluster((int) (Math.random() * image.getWidth()), (int) (Math.random() * image.getHeight())));
+
 
         //loop needs to start here
         ArrayList<Point> validPoints = getValidPoints(bluepixels2D);
         System.out.println("There are " + validPoints.size() + " valid points");
 
-        for (int rep = 0; rep < 100; rep++) {
-
+        for (int frame = 0; frame < 10; frame++) {
             assignPointsToClusters(validPoints);
 
+            System.out.println("image width: " + image.getWidth());
+            System.out.println("image height: " + image.getHeight());
+
+            for (Cluster cluster : clusters) {
+                cluster.getCenter().print();
+            }
+
+            // set rgb in the image
             for (Cluster cluster : clusters) {
                 for (Point p : cluster.getPoints()) {
                     image.setRGB(p.getColumn(), p.getRow(), cluster.getColor().getRGB());
@@ -49,6 +57,7 @@ public class Main {
                 }
             }
 
+            // set the rest of the background as black
             for (int r = 0; r < bluepixels2D.length; r++) {
                 for (int c = 0; c < bluepixels2D[r].length; c++) {
                     if (bluepixels2D[r][c] != -1) {
@@ -57,14 +66,15 @@ public class Main {
                 }
             }
 
-            for (Cluster cluster : clusters) {
-                System.out.println(cluster.size());
-            }
-
+            //recalculate clusters
             for (Cluster cluster : clusters) {
                 cluster.recalculateCenter();
                 cluster.clear();
             }
+//
+//            for (Cluster cluster : clusters) {
+//                makeMarkerAt(cluster.getCenter().getRow(), cluster.getCenter().getColumn(), image);
+//            }
         }
 
         display(image);
@@ -110,7 +120,7 @@ public class Main {
     public static void display(BufferedImage image) {
         JFrame frame = new JFrame();
         frame.getContentPane().setLayout(new FlowLayout());
-        frame.getContentPane().add(new JLabel(new ImageIcon(image)));
+        frame.getContentPane().add(new JLabel(new ImageIcon(resize(image, 480, 640))));
         frame.pack();
         frame.setVisible(true);
 

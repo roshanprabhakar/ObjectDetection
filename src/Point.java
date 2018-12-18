@@ -28,4 +28,8 @@ public class Point {
         return Math.sqrt((((this.row)-(other.getRow()))*((this.row)-(other.getRow()))) +
                 (((this.column)-(other.getColumn()))*((this.column)-(other.getColumn()))));
     }
+
+    public void print() {
+        System.out.println("row: " + row + ", column: " + column);
+    }
 }
