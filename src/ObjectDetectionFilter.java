@@ -1,4 +1,4 @@
-public class ObjectDetectionFilter implements PixelFilter {
+public class ObjectDetectionFilter {
 
     private int threshold;
     private short image[][];
