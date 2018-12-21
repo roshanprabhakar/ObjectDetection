@@ -16,10 +16,10 @@ public class ObjectDetector {
 
         bluepixels2D = FilterLib.getShortPixelValuesBW(image);
 
-        ObjectDetectionFilter objectFilter = new ObjectDetectionFilter(threshhold);
-        objectFilter.filter(bluepixels2D);
+        ObjectIsolator objectIsolator = new ObjectIsolator(threshhold);
+        objectIsolator.filter(bluepixels2D);
 
-        bluepixels2D = objectFilter.getImage();
+        bluepixels2D = objectIsolator.getImage();
 
         validPoints = getValidPoints(bluepixels2D);
     }
@@ -30,7 +30,7 @@ public class ObjectDetector {
 
     public void colorizeClusters() {
 
-        for (int rep = 0; rep < 10; rep++) {
+        for (int reps = 0; reps < 100; reps++) {
 
             assignPointsToClusters(validPoints);
 
@@ -57,7 +57,6 @@ public class ObjectDetector {
                 }
             }
         }
-
     }
 
     private ArrayList<Point> getValidPoints(short[][] bluepixels2D) {

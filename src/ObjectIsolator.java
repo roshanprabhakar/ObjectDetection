@@ -1,4 +1,4 @@
-public class ObjectDetectionFilter {
+public class ObjectIsolator {
 
     private int threshold;
     private short image[][];
@@ -21,7 +21,7 @@ public class ObjectDetectionFilter {
         return image;
     }
 
-    public ObjectDetectionFilter(int threshhold) {
+    public ObjectIsolator(int threshhold) {
         this.threshold = threshhold; // used to identify skin color
     }
 
