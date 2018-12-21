@@ -8,7 +8,7 @@ public class ObjectDetector {
     private short[][] bluepixels2D;
     ArrayList<Point> validPoints;
 
-    public ObjectDetector(int numOfObjects, BufferedImage image) {
+    public ObjectDetector(int numOfObjects, BufferedImage image, int threshhold) {
         this.image = image;
         for (int i = 0; i < numOfObjects; i++) {
             clusters.add(new Cluster((int)(Math.random()*image.getWidth()),(int)(Math.random()*image.getHeight())));
@@ -16,7 +16,7 @@ public class ObjectDetector {
 
         bluepixels2D = FilterLib.getShortPixelValuesBW(image);
 
-        ObjectDetectionFilter objectFilter = new ObjectDetectionFilter(100);
+        ObjectDetectionFilter objectFilter = new ObjectDetectionFilter(threshhold);
         objectFilter.filter(bluepixels2D);
 
         bluepixels2D = objectFilter.getImage();
@@ -29,16 +29,10 @@ public class ObjectDetector {
     }
 
     public void colorizeClusters() {
-        for (int frame = 0; frame < 10; frame++) {
+
+        for (int rep = 0; rep < 10; rep++) {
 
             assignPointsToClusters(validPoints);
-
-            System.out.println("image width: " + image.getWidth());
-            System.out.println("image height: " + image.getHeight());
-
-            for (Cluster cluster : clusters) {
-                cluster.getCenter().print();
-            }
 
             // set rgb in the image
             for (Cluster cluster : clusters) {
@@ -48,21 +42,20 @@ public class ObjectDetector {
                 }
             }
 
-            // set the rest of the background as black
-            for (int r = 0; r < bluepixels2D.length; r++) {
-                for (int c = 0; c < bluepixels2D[r].length; c++) {
-                    if (bluepixels2D[r][c] != -1) {
-                        image.setRGB(c, r, bluepixels2D[r][c]);
-                    }
-                }
-            }
-
             //recalculate clusters
             for (Cluster cluster : clusters) {
                 cluster.recalculateCenter();
                 cluster.clear();
             }
+        }
 
+        // set the rest of the background as black
+        for (int r = 0; r < bluepixels2D.length; r++) {
+            for (int c = 0; c < bluepixels2D[r].length; c++) {
+                if (bluepixels2D[r][c] != -1) {
+                    image.setRGB(c, r, bluepixels2D[r][c]);
+                }
+            }
         }
 
     }
