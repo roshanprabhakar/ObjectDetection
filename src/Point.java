@@ -29,6 +29,11 @@ public class Point {
                 (((this.column)-(other.getColumn()))*((this.column)-(other.getColumn()))));
     }
 
+    public boolean equals(Point other) {
+        if (this.row == other.getRow() && this.column == other.getColumn()) return true;
+        return false;
+    }
+
     public void print() {
         System.out.println("row: " + row + ", column: " + column);
     }

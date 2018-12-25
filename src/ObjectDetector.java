@@ -31,25 +31,19 @@ public class ObjectDetector {
     public void colorizeClusters() {
 
         for (int reps = 0; reps < 100; reps++) {
-
-            assignPointsToClusters(validPoints);
-
-            // set rgb in the image
-            for (Cluster cluster : clusters) {
-                for (Point p : cluster.getPoints()) {
-                    image.setRGB(p.getColumn(), p.getRow(), cluster.getColor().getRGB());
-                    bluepixels2D[p.getRow()][p.getColumn()] = -1;
-                }
-            }
-
-            //recalculate clusters
-            for (Cluster cluster : clusters) {
-                cluster.recalculateCenter();
-                cluster.clear();
-            }
+            runKMeans();
         }
+        recolorBackground();
+    }
 
-        // set the rest of the background as black
+    private void runKMeans() {
+        assignPointsToClusters(validPoints);
+        colorizeImage();
+        recalculateCenters();
+        clearClusters();
+    }
+
+    private void recolorBackground() {
         for (int r = 0; r < bluepixels2D.length; r++) {
             for (int c = 0; c < bluepixels2D[r].length; c++) {
                 if (bluepixels2D[r][c] != -1) {
@@ -57,6 +51,34 @@ public class ObjectDetector {
                 }
             }
         }
+    }
+
+    private void colorizeImage() {
+        for (Cluster cluster : clusters) {
+            for (Point p : cluster.getPoints()) {
+                image.setRGB(p.getColumn(), p.getRow(), cluster.getColor().getRGB());
+                bluepixels2D[p.getRow()][p.getColumn()] = -1;
+            }
+        }
+    }
+
+    private void recalculateCenters() {
+        for (Cluster cluster : clusters) {
+            cluster.recalculateCenter();
+        }
+    }
+
+    private void clearClusters() {
+        for (Cluster cluster : clusters) {
+            cluster.clear();
+        }
+    }
+
+    private boolean areEqual(ArrayList<Cluster> clusters, ArrayList<Cluster> clustersg2) {
+        for (int i = 0; i < clusters.size(); i++) {
+            if (!clusters.get(i).getCenter().equals(clustersg2.get(i).getCenter())) return false;
+        }
+        return true;
     }
 
     private ArrayList<Point> getValidPoints(short[][] bluepixels2D) {

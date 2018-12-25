@@ -56,4 +56,9 @@ public class Cluster {
     public int size() {
         return this.points.size();
     }
+
+    @Override
+    public Cluster clone() {
+        return this.clone();
+    }
 }
