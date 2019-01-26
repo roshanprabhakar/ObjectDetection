@@ -33,11 +33,25 @@ public class ObjectIsolator {
         }
     }
 
-    public short[][] filter(short[][] pixels) {
+    private void flipValues() { //incase you try to isolate someone with dark skin
+        for (int r = 0; r < image.length; r++) {
+            for (int c = 0; c < image[r].length; c++) {
+                if (image[r][c] == 255) {
+                    image[r][c] = 0;
+                } else {
+                    image[r][c] = 255;
+                }
+            }
+        }
+    }
+
+    public short[][] filter(short[][] pixels, boolean darkPeople) {
 
         this.image = pixels;
         this.image = blurKernel.convolve(image);
         setThreshold(threshold);
+
+        if (darkPeople) flipValues();
 
         return image;
     }

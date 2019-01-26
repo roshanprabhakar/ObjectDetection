@@ -8,7 +8,7 @@ public class ObjectDetector {
     private short[][] bluepixels2D;
     ArrayList<Point> validPoints;
 
-    public ObjectDetector(int numOfObjects, BufferedImage image, int threshhold) {
+    public ObjectDetector(int numOfObjects, BufferedImage image, int threshhold, boolean darkPeople) {
         this.image = image;
         for (int i = 0; i < numOfObjects; i++) {
             clusters.add(new Cluster((int)(Math.random()*image.getWidth()),(int)(Math.random()*image.getHeight())));
@@ -17,7 +17,12 @@ public class ObjectDetector {
         bluepixels2D = FilterLib.getShortPixelValuesBW(image);
 
         ObjectIsolator objectIsolator = new ObjectIsolator(threshhold);
-        objectIsolator.filter(bluepixels2D);
+
+        if (darkPeople) {
+            objectIsolator.filter(bluepixels2D, true);
+        } else {
+            objectIsolator.filter(bluepixels2D, false);
+        }
 
         bluepixels2D = objectIsolator.getImage();
 
