@@ -1,7 +1,12 @@
 import java.awt.image.BufferedImage;
+import java.security.spec.ECParameterSpec;
 import java.util.ArrayList;
 
+//class responsible for the centralization of the faes
 public class ObjectDetector {
+
+
+    private final int EPOCHS = 100;
 
     private ArrayList<Cluster> clusters = new ArrayList<>();
     private BufferedImage image;
@@ -35,10 +40,12 @@ public class ObjectDetector {
 
     public void colorizeClusters() {
 
-        for (int reps = 0; reps < 100; reps++) {
+        for (int reps = 0; reps < EPOCHS; reps++) {
             runKMeans();
         }
-        recolorBackground();
+
+        System.out.println(clusters);
+//        recolorBackground(); //makes all the unaffected pixels black
     }
 
     private void runKMeans() {

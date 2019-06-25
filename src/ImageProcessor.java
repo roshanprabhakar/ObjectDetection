@@ -3,7 +3,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
+
+//class responsible for loading and preprocessing images
 public class ImageProcessor {
     private String path;
     private BufferedImage image;
@@ -27,7 +30,14 @@ public class ImageProcessor {
         frame.getContentPane().add(new JLabel(new ImageIcon(resize(image, width, height))));
         frame.pack();
         frame.setVisible(true);
+    }
 
+    public void display() {
+        JFrame frame = new JFrame("image");
+        frame.getContentPane().setLayout(new FlowLayout());
+        frame.getContentPane().add(new JLabel(new ImageIcon(image)));
+        frame.pack();
+        frame.setVisible(true);
     }
 
     private BufferedImage resize(BufferedImage img, int newW, int newH) {
@@ -49,5 +59,14 @@ public class ImageProcessor {
             System.err.println("Error while loading image from file");
         }
         return image;
+    }
+
+    public void writeImageToFile(String filepath) {
+        File outputfile = new File(filepath);
+        try {
+            ImageIO.write(image, "jpg", outputfile);
+        } catch (IOException e) {
+            System.out.println("could not setup file");
+        }
     }
 }
