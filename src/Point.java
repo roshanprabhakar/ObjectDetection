@@ -8,6 +8,9 @@ public class Point {
         this.column = column;
     }
 
+    public Point() {
+    }
+
     public int getRow() {
         return row;
     }
@@ -29,12 +32,26 @@ public class Point {
                 (((this.column)-(other.getColumn()))*((this.column)-(other.getColumn()))));
     }
 
+    public double getSlope(Point other) {
+        return ((double)(other.getRow() - row)/(other.getColumn() - column));
+    }
+
+    //finding angle <abc in degrees
+    public static double angle(Point a, Point b, Point c) {
+
+        double ab = a.getDistanceTo(b);
+        double bc = b.getDistanceTo(c);
+        double ac = a.getDistanceTo(c);
+
+        return Math.toDegrees(Math.acos((ac*ac - ab*ab - bc*bc)/(-2 * ab * bc)));
+    }
+
     public boolean equals(Point other) {
         if (this.row == other.getRow() && this.column == other.getColumn()) return true;
         return false;
     }
 
-    public void print() {
-        System.out.println("row: " + row + ", column: " + column);
+    public String toString() {
+        return "row: " + row + ", column: " + column + "  ";
     }
 }

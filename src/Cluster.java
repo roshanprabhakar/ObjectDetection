@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Cluster {
 
@@ -18,6 +19,22 @@ public class Cluster {
         this.center = new Point(r, c);
         this.color = new Color((short) (Math.random() * 255), (short) (Math.random() * 255), (short) (Math.random() * 255));
         this.points = new ArrayList<>();
+    }
+
+    public Cluster(ArrayList<Point> points) {
+        this.points = points;
+        center = new Point();
+        recalculateCenter();
+    }
+
+    public Point getRandomPointExcept(Point exception) {
+        Collections.shuffle(points);
+        for (Point p : points) {
+            if (!p.equals(exception)) {
+                return p;
+            }
+        }
+        return null;
     }
 
     public void recalculateCenter() {
