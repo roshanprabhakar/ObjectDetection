@@ -39,19 +39,38 @@ public class OutlineFinder {
 
     //find the next point in a clockwise direction
     private Point nextPoint(Point before, Point current) {
-        double maxIncline = 0;
-        Point nextPoint = cluster.getPoints().get(0);
-        for (Point potentialAfter : cluster.getPoints()) {
-            if (Point.angle(before, current, potentialAfter) > maxIncline) {
-                nextPoint = potentialAfter;
+
+        double largestAngle = 0;
+        Point p = new Point();
+
+        for (Point after : cluster.getPoints()) {
+            if (Point.angle(before, current, after) > largestAngle) {
+                largestAngle = Point.angle(before, current, after);
+                p = after;
             }
         }
-        return nextPoint;
+
+        return p;
     }
 
     public ArrayList<Point> wrapperPoints() {
-        System.out.println("first point: " + firstPoint());
-        System.out.println("second point: " + secondPoint(firstPoint()));
-        return null;
+        ArrayList<Point> wrapperPoints = new ArrayList<>();
+
+        Point first = firstPoint();
+        Point second = secondPoint(first);
+        Point next = nextPoint(first, second);
+
+        wrapperPoints.add(first);
+        wrapperPoints.add(second);
+        wrapperPoints.add(next);
+
+        while (first == next) {
+            first = second;
+            second = next;
+            next = nextPoint(first, second);
+            if (!wrapperPoints.contains(next)) wrapperPoints.add(next);
+        }
+
+        return wrapperPoints;
     }
 }
