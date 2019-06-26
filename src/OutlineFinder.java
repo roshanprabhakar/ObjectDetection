@@ -54,7 +54,7 @@ public class OutlineFinder {
     }
 
     //find points wrapping around a cluster
-    public ArrayList<Point> wrapperPoints() throws InterruptedException {
+    public ArrayList<Point> getWrapperPoints() {
         ArrayList<Point> wrapperPoints = new ArrayList<>();
         Point firstPoint = firstPoint();
         Point firstCounter = firstPoint.clone();

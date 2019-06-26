@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.security.spec.ECParameterSpec;
 import java.util.ArrayList;
@@ -38,21 +39,41 @@ public class ObjectDetector {
         return image;
     }
 
-    public void colorizeClusters() {
+    public void colorizeClusters(boolean outline) {
 
         for (int reps = 0; reps < EPOCHS; reps++) {
             runKMeans();
         }
+//
+        Point center = clusters.get(0).getCenter();
+        drawMarkerAt(center.getRow(), center.getColumn());
+        drawMarkerAt(90, 90);
+//
+////        drawMarkerAt(0,0);
+//
+//        for (Cluster cluster : clusters) {
+//            OutlineFinder finder = new OutlineFinder(cluster);
+//            draw(finder.getWrapperPoints());
+//        }
+//
+//        ---------------------------------------
+//
+//        if (outline) {
+//            for (Cluster cluster : clusters) {
+//                OutlineFinder finder = new OutlineFinder(cluster);
+//                draw(finder.wrapperPoints());
+//            }
+//        }
 
-        System.out.println(clusters);
+//        System.out.println(clusters);
 //        recolorBackground(); //makes all the unaffected pixels black
     }
 
     private void runKMeans() {
+        clearClusters();
         assignPointsToClusters(validPoints);
         colorizeImage();
         recalculateCenters();
-        clearClusters();
     }
 
     private void recolorBackground() {
@@ -120,5 +141,19 @@ public class ObjectDetector {
             }
         }
         return minIndex;
+    }
+
+    public void draw(ArrayList<Point> outline) {
+        for (Point p : outline) {
+            drawMarkerAt(p.getRow(), p.getColumn());
+        }
+    }
+
+    public void drawMarkerAt(int row, int col) {
+        for (int r = row; r < 100; r++) {
+            for (int c = col; c < 100; c++) {
+                image.setRGB(c, r, Color.YELLOW.getRGB());
+            }
+        }
     }
 }
