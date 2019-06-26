@@ -38,7 +38,7 @@ public class OutlineFinder {
     }
 
     //find the next point in a clockwise direction
-    private Point nextPoint(Point before, Point current) {
+    public Point nextPoint(Point before, Point current) {
 
         double largestAngle = 0;
         Point p = new Point();
@@ -53,24 +53,21 @@ public class OutlineFinder {
         return p;
     }
 
-    public ArrayList<Point> wrapperPoints() {
+    //find points wrapping around a cluster
+    public ArrayList<Point> wrapperPoints() throws InterruptedException {
         ArrayList<Point> wrapperPoints = new ArrayList<>();
-
-        Point first = firstPoint();
-        Point second = secondPoint(first);
-        Point next = nextPoint(first, second);
-
-        wrapperPoints.add(first);
-        wrapperPoints.add(second);
-        wrapperPoints.add(next);
-
-        while (first == next) {
-            first = second;
-            second = next;
-            next = nextPoint(first, second);
-            if (!wrapperPoints.contains(next)) wrapperPoints.add(next);
+        Point firstPoint = firstPoint();
+        Point firstCounter = firstPoint.clone();
+        Point secondPoint = secondPoint(firstPoint);
+        Point next = nextPoint(firstPoint, secondPoint);
+        int iter = 0;
+        while (!firstPoint.equals(firstCounter) || iter == 0) {
+            firstPoint = secondPoint;
+            secondPoint = next;
+            next = nextPoint(firstPoint, secondPoint);
+            wrapperPoints.add(next);
+            iter++;
         }
-
         return wrapperPoints;
     }
 }

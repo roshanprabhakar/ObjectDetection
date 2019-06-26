@@ -54,4 +54,8 @@ public class Point {
     public String toString() {
         return "row: " + row + ", column: " + column + "  ";
     }
+
+    public Point clone() {
+        return new Point(this.row, this.column);
+    }
 }

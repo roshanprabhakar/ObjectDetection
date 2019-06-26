@@ -50,6 +50,10 @@ public class Cluster {
         this.center.setColumn(colSum / this.points.size());
     }
 
+    public Point get(int index) {
+        return points.get(index);
+    }
+
     public Point getCenter() {
         return this.center;
     }
