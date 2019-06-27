@@ -54,7 +54,7 @@ public class OutlineFinder {
     }
 
     //find points wrapping around a cluster
-    public ArrayList<Point> getWrapperPoints() {
+    public Cluster getWrapperPoints() {
         ArrayList<Point> wrapperPoints = new ArrayList<>();
         Point firstPoint = firstPoint();
         Point firstCounter = firstPoint.clone();
@@ -68,6 +68,6 @@ public class OutlineFinder {
             wrapperPoints.add(next);
             iter++;
         }
-        return wrapperPoints;
+        return new Cluster(wrapperPoints);
     }
 }

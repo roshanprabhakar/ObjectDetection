@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 //class responsible for loading and preprocessing images
@@ -67,6 +68,20 @@ public class ImageProcessor {
             ImageIO.write(image, "jpg", outputfile);
         } catch (IOException e) {
             System.out.println("could not setup file");
+        }
+    }
+
+    public void draw(Cluster outline) {
+        for (Point p : outline.getPoints()) {
+            draw(p.getColumn(), p.getRow());
+        }
+    }
+
+    public void draw(int x, int y) {
+        for (int r = 0; r < 10; r++) {
+            for (int c = 0; c < 10; c++) {
+                image.setRGB(c + x, r + y, Color.YELLOW.getRGB());
+            }
         }
     }
 }
