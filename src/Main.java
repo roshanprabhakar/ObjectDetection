@@ -22,14 +22,14 @@ public class Main {
 //        visualize(cluster, 10);
 
         ImageProcessor ip = new ImageProcessor("testImage2.jpg");
-        ObjectDetector obj = new ObjectDetector(1, ip.getImage(), 160, false);
+        ObjectDetector obj = new ObjectDetector(3, ip.getImage(), 160, false);
         obj.colorizeClusters(true);
         ip.loadImage(obj.getImage());
         for (Cluster object : obj.getClusters()) {
             OutlineFinder finder = new OutlineFinder(object);
             ip.draw(finder.getWrapperPoints());
         }
-        ip.display();
+        ip.display(480, 680);
 //
 //        ip.display(480, 680, obj.getClusters());
         ip.writeImageToFile("out.png");

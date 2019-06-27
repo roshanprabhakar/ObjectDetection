@@ -72,15 +72,16 @@ public class ImageProcessor {
     }
 
     public void draw(Cluster outline) {
+        Color markerColor = new Color((int)(Math.random() * 255),(int)(Math.random() * 255),(int)(Math.random() * 255));
         for (Point p : outline.getPoints()) {
-            draw(p.getColumn(), p.getRow());
+            draw(p.getColumn(), p.getRow(), markerColor);
         }
     }
 
-    public void draw(int x, int y) {
+    public void draw(int x, int y, Color markerColor) {
         for (int r = 0; r < 10; r++) {
             for (int c = 0; c < 10; c++) {
-                image.setRGB(c + x, r + y, Color.YELLOW.getRGB());
+                image.setRGB(c + x, r + y, markerColor.getRGB());
             }
         }
     }
